@@ -1,6 +1,8 @@
 
 package corefall.engine;
 
+import java.awt.Graphics2D;
+import corefall.entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,6 +13,9 @@ import corefall.util.Constants;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    private final Player player = new Player(
+            Constants.SCREEN_WIDTH / 2.0 - 15,
+            Constants.SCREEN_HEIGHT / 2.0 - 15);
     private Thread gameThread;
 
     public GamePanel() {
@@ -49,14 +54,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         super.paintComponent(g);
 
-        g.setColor(Color.WHITE);
+        Graphics2D g2 = (Graphics2D) g;
 
-        int size = 30;
+        player.draw(g2);
 
-        g.fillOval(
-                Constants.SCREEN_WIDTH / 2 - size / 2,
-                Constants.SCREEN_HEIGHT / 2 - size / 2,
-                size,
-                size);
+        g2.dispose();
+
     }
 }
