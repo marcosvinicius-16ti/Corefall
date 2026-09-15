@@ -10,9 +10,12 @@ public class Player {
 
     private final int size = 30;
 
+    private final PlayerStats stats;
+
     public Player(double x, double y) {
         this.x = x;
         this.y = y;
+        this.stats = new PlayerStats();
     }
 
     public void draw(Graphics2D g2) {
@@ -30,5 +33,9 @@ public class Player {
 
     public int getSize() {
         return size;
+    }
+
+    public PlayerStats getStats() {
+        return stats;
     }
 }

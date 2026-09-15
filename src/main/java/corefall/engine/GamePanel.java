@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import corefall.upgrade.Upgrade;
+
 
 import javax.swing.JPanel;
 
