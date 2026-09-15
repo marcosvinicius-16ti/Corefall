@@ -3,14 +3,15 @@ package corefall.upgrade;
 public class Upgrade {
 
     private final String name;
-    private final String description;
+    private final UpgradeType type;
     private int level;
 
-    public Upgrade(String name, String description) {
+    public Upgrade(String name, UpgradeType type) {
         this.name = name;
-        this.description = description;
+        this.type = type;
         this.level = 1;
     }
+
     public void levelUp() {
         level++;
     }
@@ -19,15 +20,77 @@ public class Upgrade {
         return name;
     }
 
+    public UpgradeType getType() {
+        return type;
+    }
+
     public int getLevel() {
         return level;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDisplayName() {
+        return name + " " + toRoman(level);
     }
 
-    public String getDisplayName() {
-        return name + " " + level;
+    public String getDescription() {
+        return "+" + getUpgradeValue() + " " + getAttributeName();
+    }
+
+    public int getUpgradeValue() {
+
+        return switch (type) {
+            case BASE_DAMAGE -> switch (level) {
+                case 1 -> 1;
+                case 2 -> 3;
+                default -> 5;
+            };
+
+            case SPEED -> switch (level) {
+                case 1 -> 1;
+                case 2 -> 2;
+                default -> 3;
+            };
+
+            case HEALTH -> switch (level) {
+                case 1 -> 5;
+                case 2 -> 8;
+                default -> 12;
+            };
+
+            case ATTACK_SPEED -> switch (level) {
+                case 1 -> 2;
+                case 2 -> 4;
+                default -> 6;
+            };
+
+            case RANGE -> switch (level) {
+                case 1 -> 2;
+                case 2 -> 4;
+                default -> 6;
+            };
+        };
+    }
+
+    private String getAttributeName() {
+
+        return switch (type) {
+            case BASE_DAMAGE -> "dano";
+            case SPEED -> "velocidade";
+            case HEALTH -> "vida máxima";
+            case ATTACK_SPEED -> "cadência";
+            case RANGE -> "alcance";
+        };
+    }
+
+    private String toRoman(int value) {
+
+        return switch (value) {
+            case 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            default -> String.valueOf(value);
+        };
     }
 }
