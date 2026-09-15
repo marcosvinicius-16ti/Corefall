@@ -6,6 +6,9 @@ import corefall.entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -18,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
             Constants.SCREEN_HEIGHT / 2.0 - 15);
     private Thread gameThread;
     private GameState gameState = GameState.MENU;
+    private final Rectangle playButton = new Rectangle(530,420, 220,46);
 
     public GamePanel() {
 
@@ -27,6 +31,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         setBackground(new Color(17, 17, 17));
         setDoubleBuffered(true);
+
+        addMouseListener(new MouseAdapter() {
+            @Override 
+            public void mouseClicked(MouseEvent e) {
+                if (gameState == GameState.MENU &&
+                    playButton.contains(e.getPoint())) {
+
+                    gameState = GameState.START_SELECTION;
+                    repaint();
+                    }
+            }
+        });
     }
 
     public void startGameThread() {
@@ -88,13 +104,14 @@ public class GamePanel extends JPanel implements Runnable {
             x + metrics.stringWidth(title) + 90, y - 18);
 
     // Botão Play
-    int bw = 220;
-    int bh = 46;
+    g2.drawRect(
+            playButton.x,
+            playButton.y,
+            playButton.width,
+            playButton.height
+    );
 
-    int bx = (Constants.SCREEN_WIDTH - bw) / 2;
-    int by = 420;
-
-    g2.drawRect(bx, by, bw, bh);
+    
 
     g2.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 20));
 
@@ -103,7 +120,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.drawString(
             play,
-            bx + (bw - playMetrics.stringWidth(play)) / 2,
-            by + 29);
+            playButton.x +
+                    (playButton.width - playMetrics.stringWidth(play)) / 2,
+            playButton.y + 29
+    );
     }
 }
