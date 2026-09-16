@@ -8,6 +8,9 @@ public class PlayerStats {
     private int speed;
     private int attackSpeed;
     private int range;
+    private int level;
+    private int currentXp;
+    private int xpToNextLevel;
 
     public PlayerStats() {
         this.maxHealth = 20;
@@ -16,6 +19,9 @@ public class PlayerStats {
         this.speed = 1;
         this.attackSpeed = 10;
         this.range = 10;
+        this.level = 1;
+        this.currentXp = 0;
+        this.xpToNextLevel = 10;
     }
 
     public int getMaxHealth() {
@@ -42,6 +48,18 @@ public class PlayerStats {
         return range;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public int getCurrentXp() {
+        return currentXp;
+    }
+
+    public int getXpToNextLevel() {
+        return xpToNextLevel;
+    }
+
     public void addMaxHealth(int value) {
         maxHealth += value;
         currentHealth += value;
@@ -61,5 +79,16 @@ public class PlayerStats {
 
     public void addRange(int value) {
         range += value;
+    }
+
+    public boolean addXp(int value) {
+        currentXp += value;
+        if (currentXp >= xpToNextLevel) {
+            currentXp -= xpToNextLevel;
+            level++;
+            xpToNextLevel += 10;
+            return true;
+        }
+        return false;
     }
 }

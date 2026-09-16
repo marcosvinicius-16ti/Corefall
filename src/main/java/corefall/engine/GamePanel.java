@@ -11,6 +11,10 @@ import java.awt.event.MouseEvent;
 import corefall.upgrade.Upgrade;
 import corefall.upgrade.UpgradeManager;
 import java.awt.Font;
+import corefall.ui.HUD;
+import java.util.List;
+import java.util.ArrayList;
+import corefall.ui.FloatingText;
 
 import javax.swing.JPanel;
 
@@ -33,7 +37,9 @@ public class GamePanel extends JPanel implements Runnable {
         new Rectangle(530,220,220,260),
         new Rectangle(840,220,220,260)
     };
-    
+    private final HUD hud = new HUD();
+    private final List<FloatingText> floatingTexts = new 
+    ArrayList<>();
 
     public GamePanel() {
 
@@ -64,6 +70,14 @@ public class GamePanel extends JPanel implements Runnable {
                         if (upgradeCards[i].contains(e.getPoint())) {
                             currentChoices[i].apply(player.getStats());
 
+                            floatingTexts.add(
+                                new FloatingText(
+                                    currentChoices[i].getDescription(),
+                                    player.getX() - 10,
+                                    player.getY() - 20
+                                )
+                            );
+
                             gameState = GameState.PLAYING;
                             repaint();
                             
@@ -90,6 +104,11 @@ public class GamePanel extends JPanel implements Runnable {
                 player.update();
             }
 
+            floatingTexts.removeIf(text -> {
+                text.update();
+                return !text.isAlive();
+            });
+
             repaint();
 
             try {
@@ -110,7 +129,13 @@ public class GamePanel extends JPanel implements Runnable {
         switch (gameState) {
             case MENU -> drawMenu(g2);
             case START_SELECTION -> drawStartSelection(g2);
-            case PLAYING -> player.draw(g2);
+            case PLAYING -> {
+                player.draw(g2);
+                hud.draw(g2, player.getStats());
+                for (FloatingText text : floatingTexts) {
+                    text.draw(g2);
+                }
+            }
             default -> {}
         }
 

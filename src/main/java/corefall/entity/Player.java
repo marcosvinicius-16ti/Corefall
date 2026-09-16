@@ -1,4 +1,6 @@
 package corefall.entity;
+
+import corefall.util.Constants;
 import corefall.engine.KeyHandler;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,8 +24,39 @@ public class Player {
     }
 
     public void draw(Graphics2D g2) {
+
+        drawHealthBar(g2);
+
         g2.setColor(Color.WHITE);
         g2.fillOval((int) x, (int) y, size, size);
+    }
+
+    private void drawHealthBar(Graphics2D g2) {
+
+        int barWidth = size;
+        int barHeight = 5;
+
+        int barX = (int) x;
+        int barY = (int) y - 10;
+
+        double healthPercent = stats.getCurrentHealth() / (double) stats.getMaxHealth();
+
+        // Fundo da barra
+        g2.setColor(new Color(50, 50, 50));
+        g2.fillRoundRect(barX, barY, barWidth, barHeight, 5, 5);
+
+        // Cor dinâmica
+        if (healthPercent > 0.7) {
+            g2.setColor(new Color(80, 255, 80));
+        } else if (healthPercent > 0.3) {
+            g2.setColor(new Color(255, 220, 70));
+        } else {
+            g2.setColor(new Color(255, 80, 80));
+        }
+
+        int currentWidth = (int) (barWidth * healthPercent);
+
+        g2.fillRoundRect(barX, barY, currentWidth, barHeight, 5, 5);
     }
 
     public double getX() {
@@ -44,22 +77,32 @@ public class Player {
 
     public void update() {
 
+        double dx = 0;
+        double dy = 0;
+
         int speed = stats.getSpeed();
 
-        if (keyHandler.upPressed) {
-            y -= speed;
+        if (keyHandler.upPressed)
+            dy--;
+        if (keyHandler.downPressed)
+            dy++;
+        if (keyHandler.leftPressed)
+            dx--;
+        if (keyHandler.rightPressed)
+            dx++;
+
+        if (dx != 0 || dy != 0) {
+
+            double length = Math.sqrt(dx * dx + dy * dy);
+
+            dx = dx / length * speed;
+            dy = dy / length * speed;
+
+            x += dx;
+            y += dy;
         }
 
-        if (keyHandler.downPressed) {
-            y += speed;
-        }
-
-        if (keyHandler.leftPressed) {
-            x -= speed;
-        }
-
-        if (keyHandler.rightPressed) {
-            x += speed;
-        }
+        x = Math.max(0, Math.min(x, Constants.SCREEN_WIDTH - size));
+        y = Math.max(0, Math.min(y, Constants.SCREEN_HEIGHT - size));
     }
 }
