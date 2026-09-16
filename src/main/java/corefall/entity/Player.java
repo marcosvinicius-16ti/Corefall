@@ -1,5 +1,5 @@
 package corefall.entity;
-
+import corefall.engine.KeyHandler;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -12,10 +12,13 @@ public class Player {
 
     private final PlayerStats stats;
 
-    public Player(double x, double y) {
+    private final KeyHandler keyHandler;
+
+    public Player(double x, double y, KeyHandler keyHandler) {
         this.x = x;
         this.y = y;
         this.stats = new PlayerStats();
+        this.keyHandler = keyHandler;
     }
 
     public void draw(Graphics2D g2) {
@@ -37,5 +40,26 @@ public class Player {
 
     public PlayerStats getStats() {
         return stats;
+    }
+
+    public void update() {
+
+        int speed = stats.getSpeed();
+
+        if (keyHandler.upPressed) {
+            y -= speed;
+        }
+
+        if (keyHandler.downPressed) {
+            y += speed;
+        }
+
+        if (keyHandler.leftPressed) {
+            x -= speed;
+        }
+
+        if (keyHandler.rightPressed) {
+            x += speed;
+        }
     }
 }

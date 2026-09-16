@@ -17,10 +17,11 @@ import javax.swing.JPanel;
 import corefall.util.Constants;
 
 public class GamePanel extends JPanel implements Runnable {
-
+    private final KeyHandler keyHandler = new KeyHandler();
     private final Player player = new Player(
             Constants.SCREEN_WIDTH / 2.0 - 15,
-            Constants.SCREEN_HEIGHT / 2.0 - 15);
+            Constants.SCREEN_HEIGHT / 2.0 - 15,
+            keyHandler);
     private Thread gameThread;
     private GameState gameState = GameState.MENU;
     private final Rectangle playButton = new Rectangle(530, 420, 220, 46);
@@ -32,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
         new Rectangle(530,220,220,260),
         new Rectangle(840,220,220,260)
     };
+    
 
     public GamePanel() {
 
@@ -41,6 +43,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         setBackground(new Color(17, 17, 17));
         setDoubleBuffered(true);
+
+        addKeyListener(keyHandler);
+        setFocusable(true);
+        requestFocusInWindow();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -79,6 +85,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         while (gameThread != null) {
+
+            if (gameState == GameState.PLAYING) {
+                player.update();
+            }
 
             repaint();
 
