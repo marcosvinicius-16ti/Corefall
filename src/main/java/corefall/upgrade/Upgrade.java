@@ -74,11 +74,11 @@ public class Upgrade {
     private String getAttributeName() {
 
         return switch (type) {
-            case BASE_DAMAGE -> "dano";
-            case SPEED -> "velocidade";
-            case HEALTH -> "vida máxima";
-            case ATTACK_SPEED -> "cadência";
-            case RANGE -> "alcance";
+            case BASE_DAMAGE -> "Dano Base";
+            case SPEED -> "Agilidade";
+            case HEALTH -> "Vida Extra";
+            case ATTACK_SPEED -> "Velocidade de Ataque";
+            case RANGE -> "Alcance";
         };
     }
 
