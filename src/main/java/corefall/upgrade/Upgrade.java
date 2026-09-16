@@ -71,6 +71,22 @@ public class Upgrade {
         };
     }
 
+    public void apply(corefall.entity.PlayerStats stats) {
+
+        switch (type) {
+            case BASE_DAMAGE ->
+    stats.addBaseDamage(getUpgradeValue());
+            case SPEED -> 
+    stats.addSpeed(getUpgradeValue());
+            case HEALTH -> 
+    stats.addMaxHealth(getUpgradeValue());
+            case ATTACK_SPEED -> 
+    stats.addAttackSpeed(getUpgradeValue());
+            case RANGE -> 
+    stats.addRange(getUpgradeValue());
+        }
+    }
+
     private String getAttributeName() {
 
         return switch (type) {

@@ -53,6 +53,18 @@ public class GamePanel extends JPanel implements Runnable {
                     gameState = GameState.START_SELECTION;
                     repaint();
                 }
+                else if (gameState == GameState.START_SELECTION) {
+                    for (int i = 0; i < upgradeCards.length; i++) {
+                        if (upgradeCards[i].contains(e.getPoint())) {
+                            currentChoices[i].apply(player.getStats());
+
+                            gameState = GameState.PLAYING;
+                            repaint();
+                            
+                            break;
+                        }
+                    }
+                }
             }
         });
     }

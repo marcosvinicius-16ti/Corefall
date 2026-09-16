@@ -16,7 +16,7 @@ public class UpgradeManager {
     upgradePool.add(new Upgrade("Dano Base", UpgradeType.BASE_DAMAGE));
     upgradePool.add(new Upgrade("Agilidade", UpgradeType.SPEED));
     upgradePool.add(new Upgrade("Vida Extra", UpgradeType.HEALTH));
-    upgradePool.add(new Upgrade("Velocidade de Ataque", UpgradeType.ATTACK_SPEED));
+    upgradePool.add(new Upgrade("Cadencia", UpgradeType.ATTACK_SPEED));
     upgradePool.add(new Upgrade("Alcance", UpgradeType.RANGE));
 }
 
