@@ -4,6 +4,8 @@ import corefall.util.Constants;
 import corefall.engine.KeyHandler;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
 
 public class Player {
 
@@ -16,6 +18,10 @@ public class Player {
 
     private final KeyHandler keyHandler;
 
+    public int getAttackRadius() {
+        return stats.getRange() * 8;
+    }
+
     public Player(double x, double y, KeyHandler keyHandler) {
         this.x = x;
         this.y = y;
@@ -25,6 +31,7 @@ public class Player {
 
     public void draw(Graphics2D g2) {
 
+        drawAttackRadius(g2);
         drawHealthBar(g2);
 
         g2.setColor(Color.WHITE);
@@ -58,6 +65,42 @@ public class Player {
 
         g2.fillRoundRect(barX, barY, currentWidth, barHeight, 5, 5);
     }
+
+    private void drawAttackRadius(Graphics2D g2) {
+
+        int radius = getAttackRadius();
+
+        int centerX = (int) x + size / 2;
+        int centerY = (int) y + size / 2;
+
+        Composite original = g2.getComposite();
+
+        g2.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER,
+                0.10f));
+
+        g2.setColor(Color.WHITE);
+
+        g2.fillOval(
+                centerX - radius,
+                centerY - radius,
+                radius * 2,
+                radius * 2);
+
+        g2.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER,
+                0.30f));
+
+        g2.drawOval(
+                centerX - radius,
+                centerY - radius,
+                radius * 2,
+                radius * 2);
+
+        g2.setComposite(original);
+    }
+
+
 
     public double getX() {
         return x;
