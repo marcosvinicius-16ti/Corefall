@@ -15,8 +15,10 @@ import corefall.ui.HUD;
 import java.util.List;
 import java.util.ArrayList;
 import corefall.ui.FloatingText;
-
+import corefall.entity.SpawnManager;
+import corefall.entity.Enemy;
 import javax.swing.JPanel;
+import corefall.combat.Projectile;
 
 import corefall.util.Constants;
 
@@ -40,6 +42,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final HUD hud = new HUD();
     private final List<FloatingText> floatingTexts = new 
     ArrayList<>();
+    private final SpawnManager spawnManager = new SpawnManager();
+    private final List<Projectile> projectiles = new ArrayList<>();
 
     public GamePanel() {
 
@@ -102,6 +106,23 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (gameState == GameState.PLAYING) {
                 player.update();
+
+                for (Enemy enemy : spawnManager.getEnemies()) {
+                    enemy.update(player);
+                }
+
+                for(Enemy enemy : spawnManager.getEnemies()) {
+                    Projectile projectile = enemy.tryShoot(player);
+                    if (projectile != null) {
+                        projectiles.add(projectile);
+                    }
+                }
+
+                projectiles.removeIf(projectile -> {
+                    projectile.update(player);
+                    return projectile.isOutsideScreen() || 
+                projectile.isExpired();
+                });
             }
 
             floatingTexts.removeIf(text -> {
@@ -131,9 +152,19 @@ public class GamePanel extends JPanel implements Runnable {
             case START_SELECTION -> drawStartSelection(g2);
             case PLAYING -> {
                 player.draw(g2);
+
+                for (Enemy enemy : spawnManager.getEnemies()) {
+                    enemy.draw(g2);
+                }
+
                 hud.draw(g2, player.getStats());
+
                 for (FloatingText text : floatingTexts) {
                     text.draw(g2);
+                }
+
+                for (Projectile projectile : projectiles) {
+                    projectile.draw(g2);
                 }
             }
             default -> {}
