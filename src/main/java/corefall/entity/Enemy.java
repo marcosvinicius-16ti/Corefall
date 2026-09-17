@@ -1,4 +1,5 @@
 package corefall.entity;
+
 import corefall.combat.Projectile;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -11,8 +12,9 @@ public class Enemy {
     private final int size = 24;
 
     private final EnemyType type;
-    private int attackCooldown = 360;
+    private int attackCooldown = SHOOTER_ATTACK_COOLDOWN;
     private final double speed = 0.8;
+    private static final int SHOOTER_ATTACK_COOLDOWN = 360;
 
     public Enemy(double x, double y, EnemyType type) {
         this.x = x;
@@ -45,8 +47,16 @@ public class Enemy {
             case CHASER ->
                 g2.fillOval((int) x, (int) y, size, size);
 
-            case SHOOTER ->
+            case SHOOTER -> {
+
+                if (attackCooldown <= 15) {
+                    g2.setColor(Color.WHITE);
+                } else {
+                    g2.setColor(new Color(220, 70, 70));
+                }
+
                 g2.fillRect((int) x, (int) y, size, size);
+            }
         }
     }
 
@@ -86,7 +96,7 @@ public class Enemy {
             return null;
         }
 
-        attackCooldown = 360;
+        attackCooldown = SHOOTER_ATTACK_COOLDOWN;
 
         double centerX = x + size / 2.0;
         double centerY = y + size / 2.0;

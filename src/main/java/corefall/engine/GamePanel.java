@@ -120,8 +120,14 @@ public class GamePanel extends JPanel implements Runnable {
 
                 projectiles.removeIf(projectile -> {
                     projectile.update(player);
+
+                    if (projectile.collidesWith(player)) {
+                        player.getStats().takeDamage(1);
+                        projectile.markAsHit();
+                    }
                     return projectile.isOutsideScreen() || 
-                projectile.isExpired();
+                projectile.isExpired()
+                || projectile.hasHit();
                 });
             }
 

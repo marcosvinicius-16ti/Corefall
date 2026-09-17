@@ -13,8 +13,9 @@ public class Projectile {
     private double dy;
 
     private final int size = 8;
-    private final double speed = 3;
+    private final double speed = 1.8;
     private int lifetime = 240;
+    private boolean hit = false;
 
     public Projectile(double x, double y, double dx, double dy) {
 
@@ -67,5 +68,28 @@ public class Projectile {
 
     public boolean isExpired() {
         return lifetime <= 0;
+    }
+
+    public void markAsHit() {
+        hit = true;
+    }
+
+    public boolean hasHit() {
+        return hit;
+    }
+
+    public boolean collidesWith(Player player) {
+        double projectileCenterX = x + size / 2.0;
+        double projectileCenterY = y + size / 2.0;
+
+        double playerCenterX = player.getX() + player.getSize() / 2.0;
+        double playerCenterY = player.getY() + player.getSize() / 2.0;
+
+        double dx = projectileCenterX - playerCenterX;
+        double dy = projectileCenterY - playerCenterY;
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < (size + player.getSize()) / 2.0;
     }
 }
