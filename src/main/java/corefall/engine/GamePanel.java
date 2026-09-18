@@ -122,6 +122,10 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
 
+                player.getAura().update(spawnManager.getEnemies());
+
+                spawnManager.update();
+
                 projectiles.removeIf(projectile -> {
                     projectile.update(player);
 

@@ -16,4 +16,8 @@ public class SpawnManager {
     public List<Enemy> getEnemies() {
         return enemies;
     }
+
+    public void update() {
+        enemies.removeIf(Enemy::shouldRemove);
+    }
 }

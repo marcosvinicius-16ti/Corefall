@@ -6,11 +6,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
+import corefall.combat.Aura;
 
 public class Player {
 
     private double x;
     private double y;
+
+    private final Aura aura;
 
     private final int size = 30;
 
@@ -27,11 +30,12 @@ public class Player {
         this.y = y;
         this.stats = new PlayerStats();
         this.keyHandler = keyHandler;
+        this.aura = new Aura(this);
     }
 
     public void draw(Graphics2D g2) {
 
-        drawAttackRadius(g2);
+        aura.draw(g2);
         drawHealthBar(g2);
 
         if (stats.getInvincibilityFrames() % 4 < 2) {
@@ -70,42 +74,6 @@ public class Player {
         g2.fillRoundRect(barX, barY, currentWidth, barHeight, 5, 5);
     }
 
-    private void drawAttackRadius(Graphics2D g2) {
-
-        int radius = getAttackRadius();
-
-        int centerX = (int) x + size / 2;
-        int centerY = (int) y + size / 2;
-
-        Composite original = g2.getComposite();
-
-        g2.setComposite(AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER,
-                0.10f));
-
-        g2.setColor(Color.WHITE);
-
-        g2.fillOval(
-                centerX - radius,
-                centerY - radius,
-                radius * 2,
-                radius * 2);
-
-        g2.setComposite(AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER,
-                0.30f));
-
-        g2.drawOval(
-                centerX - radius,
-                centerY - radius,
-                radius * 2,
-                radius * 2);
-
-        g2.setComposite(original);
-    }
-
-
-
     public double getX() {
         return x;
     }
@@ -120,6 +88,10 @@ public class Player {
 
     public PlayerStats getStats() {
         return stats;
+    }
+
+    public Aura getAura() {
+        return aura;
     }
 
     public void update() {
