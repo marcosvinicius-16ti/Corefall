@@ -34,7 +34,11 @@ public class Player {
         drawAttackRadius(g2);
         drawHealthBar(g2);
 
-        g2.setColor(Color.WHITE);
+        if (stats.getInvincibilityFrames() % 4 < 2) {
+            g2.setColor(new Color(255, 120, 120));
+        } else {
+            g2.setColor(Color.WHITE);
+        }
         g2.fillOval((int) x, (int) y, size, size);
     }
 
@@ -119,6 +123,8 @@ public class Player {
     }
 
     public void update() {
+
+        stats.update();
 
         double dx = 0;
         double dy = 0;

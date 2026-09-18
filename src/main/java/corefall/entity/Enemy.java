@@ -106,4 +106,24 @@ public class Enemy {
 
         return new Projectile(centerX, centerY, dx, dy);
     }
+
+    public boolean collidesWith(Player player) {
+
+        if (type != EnemyType.CHASER) {
+            return false;
+        }
+
+        double enemyCenterX = x + size / 2.0;
+        double enemyCenterY = y + size / 2.0;
+
+        double playerCenterX = player.getX() + player.getSize() / 2.0;
+        double playerCenterY = player.getY() + player.getSize() / 2.0;
+
+        double dx = enemyCenterX - playerCenterX;
+        double dy = enemyCenterY - playerCenterY;
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < (size + player.getSize()) / 2.0;
+    }
 }

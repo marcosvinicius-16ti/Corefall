@@ -109,6 +109,10 @@ public class GamePanel extends JPanel implements Runnable {
 
                 for (Enemy enemy : spawnManager.getEnemies()) {
                     enemy.update(player);
+
+                    if (enemy.collidesWith(player)) {
+                        player.getStats().takeDamage(2);
+                    }
                 }
 
                 for(Enemy enemy : spawnManager.getEnemies()) {
@@ -122,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
                     projectile.update(player);
 
                     if (projectile.collidesWith(player)) {
-                        player.getStats().takeDamage(1);
+                        player.getStats().takeDamage(5);
                         projectile.markAsHit();
                     }
                     return projectile.isOutsideScreen() || 

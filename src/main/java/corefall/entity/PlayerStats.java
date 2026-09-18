@@ -11,6 +11,7 @@ public class PlayerStats {
     private int level;
     private int currentXp;
     private int xpToNextLevel;
+    private int invincibilityFrames;
 
     public PlayerStats() {
         this.maxHealth = 20;
@@ -22,6 +23,7 @@ public class PlayerStats {
         this.level = 1;
         this.currentXp = 0;
         this.xpToNextLevel = 10;
+        this.invincibilityFrames = 0;
     }
 
     public int getMaxHealth() {
@@ -60,6 +62,10 @@ public class PlayerStats {
         return xpToNextLevel;
     }
 
+    public int getInvincibilityFrames() {
+        return invincibilityFrames;
+    }
+
     public void addMaxHealth(int value) {
         maxHealth += value;
         currentHealth += value;
@@ -93,9 +99,21 @@ public class PlayerStats {
     }
 
     public void takeDamage(int damage) {
+
+        if (invincibilityFrames > 0) {
+            return;
+        }
+
         currentHealth -= damage;
         if (currentHealth < 0) {
             currentHealth = 0;
+        }
+        invincibilityFrames = 30;
+    }
+
+    public void update() {
+        if (invincibilityFrames > 0) {
+            invincibilityFrames--;
         }
     }
 }
